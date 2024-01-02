@@ -1,7 +1,9 @@
 const TIME_PER_QUESTION = 15;
 const START_TIME = questions.length * TIME_PER_QUESTION;
 const PENALTY = 10;
-let currentTime, currentQuestionIndex, score;
+let currentQuestionIndex = 0;
+let score = 0;
+let currentTime;
 
 
 //Start game
@@ -19,7 +21,7 @@ function showGamePage() {
 
 // Timer
 function startTimer() {
-console.log('startTimer');
+    console.log('startTimer');
 }
 
 function updateTimer() {
@@ -32,7 +34,27 @@ function subtractTime(penalty) {
 
 //Questions
 function showNextQuestion() {
-    console.log('showNextQuestion');
+    if (currentQuestionIndex < questions.length) {
+        let question = questions[currentQuestionIndex];
+
+        document.getElementById('question-title').textContent = question.question;
+
+        let choicesContainer = document.getElementById('choices');
+        choicesContainer.innerHTML = '';
+
+        question.choices.forEach(choice => {
+            let button = document.createElement('button');
+            button.textContent = choice;
+            button.addEventListener('click', () => checkAnswer(choice));
+            choicesContainer.appendChild(button);
+        });
+
+        currentQuestionIndex++;
+
+    } else {
+        endGame();
+    }
+    console.log('showNextQuestion ' + currentQuestionIndex);
 }
 
 function checkAnswer(selectedAnswer) {
