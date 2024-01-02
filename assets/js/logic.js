@@ -21,11 +21,23 @@ function showGamePage() {
 
 // Timer
 function startTimer() {
-    console.log('startTimer');
+    updateTimerDisplay();
+
+    setInterval(function() {
+        if (currentTime <= 0) {
+            endGame();
+        } else {
+            currentTime--;
+            updateTimerDisplay();
+        }
+    }, 1000);
 }
 
-function updateTimer() {
-    console.log('updateTimer');
+function updateTimerDisplay() {
+    let timerElement = document.getElementById('time');
+    if (timerElement) {
+        timerElement.textContent = currentTime;
+    }
 }
 
 function subtractTime(penalty) {
