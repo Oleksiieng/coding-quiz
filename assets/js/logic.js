@@ -4,6 +4,7 @@ const PENALTY = 10;
 let currentQuestionIndex = 0;
 let score = 0;
 let currentTime;
+let timerInterval;
 
 
 //Start game
@@ -23,7 +24,7 @@ function showGamePage() {
 function startTimer() {
     updateTimerDisplay();
 
-    setInterval(function() {
+    timerInterval = setInterval(function () {
         if (currentTime <= 0) {
             endGame();
         } else {
@@ -84,18 +85,41 @@ function checkAnswer(selectedAnswer) {
     showNextQuestion();
 }
 
-
-//end game
+//End game
 function endGame() {
-    console.log('endGame');
+    clearInterval(timerInterval);
+
+    document.getElementById('questions').classList.add('hide');
+    document.getElementById('end-screen').classList.remove('hide');
+
+    score = currentTime;
+    document.getElementById('final-score').textContent = score;
+    updateTimerDisplay();
+
+    document.getElementById('submit').addEventListener('click', function () {
+        saveScore();
+    });
 }
 
 //Score
 function saveScore() {
-    console.log('saveScore');
+    let initials = document.getElementById('initials').value;
+    if (!initials) {
+        alert('Please enter initials');
+        return;
+    }
+
+    let storedScores = getStoredScores();
+
+    storedScores.push({ initials: initials, score: score });
+
+    localStorage.setItem('scores', JSON.stringify(storedScores));
+
+    window.location.href = 'highscores.html';
 }
 
 function getStoredScores() {
-    console.log('getStoredScores');
+    let scores = localStorage.getItem('scores');
+    return scores ? JSON.parse(scores) : [];
 }
 
