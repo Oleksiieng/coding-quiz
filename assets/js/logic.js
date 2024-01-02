@@ -1,11 +1,10 @@
-const TIME_PER_QUESTION = 15;
+const TIME_PER_QUESTION = 10;
 const START_TIME = questions.length * TIME_PER_QUESTION;
 const PENALTY = 10;
 let currentQuestionIndex = 0;
 let score = 0;
 let currentTime;
 let timerInterval;
-
 
 //Start game
 function startGame() {
@@ -46,7 +45,6 @@ function subtractTime(penalty) {
     if (currentTime < 0) {
         currentTime = 0;
     }
-    console.log('subtractTime');
 }
 
 //Questions
@@ -78,11 +76,27 @@ function checkAnswer(selectedAnswer) {
 
     if (selectedAnswer !== correctAnswer) {
         subtractTime(PENALTY);
+        showFeedback(false);
+    } else {
+        showFeedback(true);
     }
 
-    currentQuestionIndex++;
+    setTimeout(function() {
+        currentQuestionIndex++;
+        showNextQuestion();
+    }, 1000); 
+}
 
-    showNextQuestion();
+function showFeedback(isCorrect) {
+    let feedbackElement = document.getElementById('feedback');
+    if (feedbackElement) {
+        feedbackElement.textContent = isCorrect ? "Correct!" : "Wrong!";
+        feedbackElement.classList.remove('hide');
+    }
+
+    setTimeout(function() {
+        feedbackElement.classList.add('hide');
+    }, 700);    
 }
 
 //End game
