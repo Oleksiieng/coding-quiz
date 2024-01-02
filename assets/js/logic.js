@@ -29,6 +29,10 @@ function updateTimer() {
 }
 
 function subtractTime(penalty) {
+    currentTime = currentTime - penalty;
+    if (currentTime < 0) {
+        currentTime = 0;
+    }
     console.log('subtractTime');
 }
 
@@ -49,16 +53,23 @@ function showNextQuestion() {
             choicesContainer.appendChild(button);
         });
 
-        currentQuestionIndex++;
-
     } else {
+
         endGame();
+
     }
-    console.log('showNextQuestion ' + currentQuestionIndex);
 }
 
 function checkAnswer(selectedAnswer) {
-    console.log('checkAnswer');
+    let correctAnswer = questions[currentQuestionIndex].answer;
+
+    if (selectedAnswer !== correctAnswer) {
+        subtractTime(PENALTY);
+    }
+
+    currentQuestionIndex++;
+
+    showNextQuestion();
 }
 
 
